@@ -1,0 +1,16 @@
+{
+  "name": "campus-resource-hub",
+  "version": "1.0.0",
+  "description": "Campus Resource Booking & Conflict Resolution System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "qrcode": "^1.5.3",
+    "ws": "^8.17.1"
+  }
+}

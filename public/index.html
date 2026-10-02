@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniReserve | Campus Resource Booking & Conflict Resolution System</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="brand-section">
+      <div class="brand-icon">🏛️</div>
+      <div>
+        <div class="brand-title">UniReserve Hub</div>
+        <div class="brand-subtitle">Campus Resource Booking & Conflict Resolution</div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Persona / Role Switcher for Hackathon Demo -->
+      <div class="role-box">
+        <label for="current-role">Active Persona:</label>
+        <select id="current-role" class="role-select">
+          <option value="student">🎓 Alex Rivera (Student Club Lead)</option>
+          <option value="faculty">👨‍🏫 Dr. K. Sharma (Faculty Approver / HOD)</option>
+          <option value="admin">🏛️ Estate Office (Campus Administrator)</option>
+          <option value="viewer">👀 Campus Visitor / Auditor (Read-Only)</option>
+        </select>
+      </div>
+
+      <button id="theme-toggle" class="btn btn-secondary" title="Toggle Theme">🌙</button>
+
+      <button class="btn btn-primary" id="btn-open-booking-modal">
+        <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i>
+        <span>Request Booking</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hackathon Presentation Demo Bar -->
+  <div class="demo-bar">
+    <div class="demo-bar-left">
+
+      <span>Automatic Prevention of Double Bookings & Real-Time Availability Engine</span>
+    </div>
+    <div class="demo-actions">
+      <button class="btn-demo btn-demo-sim" id="btn-simulate-conflict" title="Simulate two concurrent booking requests hitting the exact same slot">
+        ⚡ Simulate Collision & Prevention
+      </button>
+      <button class="btn-demo" id="btn-reset-demo" title="Restore seed bookings and reset database">
+        🔄 Reset Demo Data
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="resources">
+      <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
+      <span>Resource Catalog</span>
+      <span class="tab-count" id="count-resources">7</span>
+    </button>
+    <button class="tab-btn" data-tab="timeline">
+      <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+      <span>Live Schedule Matrix</span>
+    </button>
+    <button class="tab-btn" data-tab="conflicts">
+      <i data-lucide="shield-alert" style="width: 16px; height: 16px;"></i>
+      <span>Conflict Resolution Center</span>
+      <span class="tab-count" id="count-conflicts" style="background: rgba(244, 63, 94, 0.4); color: #fda4af;">1</span>
+    </button>
+    <button class="tab-btn" data-tab="approvals">
+      <i data-lucide="check-square" style="width: 16px; height: 16px;"></i>
+      <span>Approval Workflow</span>
+      <span class="tab-count" id="count-pending-approvals" style="background: rgba(245, 158, 11, 0.4); color: #fbbf24;">2</span>
+    </button>
+    <button class="tab-btn" data-tab="my-bookings">
+      <i data-lucide="ticket" style="width: 16px; height: 16px;"></i>
+      <span>My Bookings & QR Pass</span>
+      <span class="tab-count" id="count-my-bookings">0</span>
+    </button>
+    <button class="tab-btn" data-tab="analytics">
+      <i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i>
+      <span>Campus Analytics</span>
+    </button>
+  </nav>
+
+  <!-- Main Views Container -->
+  <main class="main-container">
+
+    <!-- TAB 1: Resource Catalog -->
+    <section id="view-resources" class="tab-view active">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h2>Campus Venues & Facilities</h2>
+          <p>Browse auditoriums, compute labs, seminar halls, and smart classrooms with live availability.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+          <input type="text" id="filter-search" class="form-control" placeholder="Search venue, amenity, building..." style="width: 240px;">
+          <select id="filter-category" class="form-control" style="width: 170px;">
+            <option value="ALL">All Categories</option>
+            <option value="Auditorium">Auditoriums</option>
+            <option value="Computer Lab">Computer Labs</option>
+            <option value="Seminar Hall">Seminar Halls</option>
+            <option value="Classroom">Classrooms</option>
+            <option value="Sports Complex">Sports Complex</option>
+            <option value="Media Kit / Studio">Media Studios</option>
+          </select>
+          <button id="btn-open-add-resource-modal" class="btn btn-primary" style="display: none; align-items: center; gap: 0.4rem; font-size: 0.82rem; padding: 0.55rem 0.9rem;">
+            <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i>
+            <span>Add Venue</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="resource-grid" id="resources-grid-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 2: Live Schedule Matrix -->
+    <section id="view-timeline" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h2>Interactive Schedule & Availability Matrix</h2>
+          <p>Real-time visual occupancy grid. Green slots are free for 1-click reservation.</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <label style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Selected Date:</label>
+          <input type="date" id="timeline-date-picker" class="form-control" style="width: 170px;">
+        </div>
+      </div>
+
+      <!-- Visual Legend -->
+      <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.8rem;">
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <span style="width: 12px; height: 12px; background: rgba(16, 185, 129, 0.4); border: 1px dashed #10b981; border-radius: 2px;"></span>
+          <span>Available (Click to Book)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <span style="width: 12px; height: 12px; background: rgba(244, 63, 94, 0.5); border: 1px solid #f43f5e; border-radius: 2px;"></span>
+          <span>Approved / Reserved</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <span style="width: 12px; height: 12px; background: rgba(245, 158, 11, 0.5); border: 1px solid #f59e0b; border-radius: 2px;"></span>
+          <span>Pending Approval Review</span>
+        </div>
+      </div>
+
+      <div class="timeline-container">
+        <table class="timeline-table" id="timeline-table">
+          <!-- Rendered dynamically -->
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: Conflict Resolution Center -->
+    <section id="view-conflicts" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h2>Conflict Resolution & Zero-Double-Booking Engine</h2>
+          <p>Mathematical overlap verification, automated collision interception, and intelligent alternative recommendations.</p>
+        </div>
+      </div>
+
+      <!-- Engine Explanation Banner -->
+      <div class="glass-panel" style="margin-bottom: 1.5rem; border-left: 4px solid var(--accent-indigo);">
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+          <div style="font-size: 2rem;">🛡️</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem;">Concurrency-Safe Double-Booking Prevention</h4>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+              Every reservation request is evaluated through an interval overlap theorem:
+              <code class="overlap-formula">(startProposed &lt; endExisting) &amp;&amp; (endProposed &gt; startExisting)</code>.
+              Colliding requests are automatically rejected with HTTP 409, logged to the campus audit trail, and immediately returned with closest available windows &amp; alternate venues.
+            </p>
+            <button class="btn btn-secondary" id="btn-trigger-sim-conflict" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
+              <i data-lucide="zap" style="width: 14px; height: 14px;"></i> Test Live Collision Prevention
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Intercepted Conflicts Table -->
+      <div class="glass-panel">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+          <span>Intercepted Collision Audit Log</span>
+          <span class="badge badge-rejected" id="badge-total-prevented">0 Collisions Averted</span>
+        </h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted);">
+                <th style="padding: 0.75rem;">Timestamp</th>
+                <th style="padding: 0.75rem;">Target Venue</th>
+                <th style="padding: 0.75rem;">Attempted By / Event</th>
+                <th style="padding: 0.75rem;">Requested Window</th>
+                <th style="padding: 0.75rem;">Collision Cause</th>
+                <th style="padding: 0.75rem;">System Action</th>
+              </tr>
+            </thead>
+            <tbody id="conflicts-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Approval Workflow Portal -->
+    <section id="view-approvals" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h2>Campus Approval Workflow Portal</h2>
+          <p>Role-based sign-offs for Faculty Advisors and Campus Estate Administration.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-secondary" id="filter-approval-all">All Bookings</button>
+          <button class="btn btn-primary" id="filter-approval-pending">Action Required</button>
+        </div>
+      </div>
+
+      <!-- Approvals Table Container -->
+      <div class="glass-panel">
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted);">
+                <th style="padding: 0.75rem;">Event &amp; Requester</th>
+                <th style="padding: 0.75rem;">Resource</th>
+                <th style="padding: 0.75rem;">Date &amp; Time</th>
+                <th style="padding: 0.75rem;">Attendees</th>
+                <th style="padding: 0.75rem;">Approval Stage</th>
+                <th style="padding: 0.75rem;">Status</th>
+                <th style="padding: 0.75rem; text-align: right;">Review Action</th>
+              </tr>
+            </thead>
+            <tbody id="approvals-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: My Bookings & QR Pass -->
+    <section id="view-my-bookings" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h2>My Bookings &amp; Digital Passes</h2>
+          <p>Track your reservations, view review history, and access scannable QR passes for gate security.</p>
+        </div>
+      </div>
+
+      <div id="my-bookings-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.25rem;">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 6: Analytics & Utilization -->
+    <section id="view-analytics" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h2>Campus Resource Utilization &amp; Metrics</h2>
+          <p>Live visibility into venue occupancy, peak usage hours, and conflict statistics.</p>
+        </div>
+      </div>
+
+      <!-- Top KPI Cards -->
+      <div class="stats-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total Reservations</div>
+          <div class="metric-value" id="kpi-total-bookings">0</div>
+        </div>
+        <div class="metric-card accent-emerald">
+          <div class="metric-label">Confirmed &amp; Approved</div>
+          <div class="metric-value" id="kpi-approved-bookings">0</div>
+        </div>
+        <div class="metric-card accent-amber">
+          <div class="metric-label">Pending Review</div>
+          <div class="metric-value" id="kpi-pending-bookings">0</div>
+        </div>
+        <div class="metric-card accent-rose">
+          <div class="metric-label">Double-Bookings Prevented</div>
+          <div class="metric-value" id="kpi-prevented-conflicts">0</div>
+        </div>
+      </div>
+
+      <!-- Resource Utilization Breakdown -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+        <div class="glass-panel">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Resource Demand Ranking</h3>
+          <div id="analytics-popularity-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="glass-panel">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Active Clubs &amp; Departments</h3>
+          <div id="analytics-clubs-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL 1: Smart Booking Request Form (With Real-Time Conflict Detection) -->
+  <div class="modal-backdrop" id="modal-booking">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Request Campus Resource</h3>
+        <button class="btn-close" id="btn-close-booking-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Live Dynamic Conflict Preview Banner -->
+        <div id="conflict-preview-banner" class="conflict-alert-box">
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <form id="form-booking">
+          <div class="form-group">
+            <label for="booking-resource">Target Campus Resource *</label>
+            <select id="booking-resource" class="form-control" required>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="booking-date">Event Date *</label>
+              <input type="date" id="booking-date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="booking-attendees">Expected Attendance *</label>
+              <input type="number" id="booking-attendees" class="form-control" min="1" max="1000" value="50" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="booking-start">Start Time *</label>
+              <input type="time" id="booking-start" class="form-control" value="10:00" required>
+            </div>
+            <div class="form-group">
+              <label for="booking-end">End Time *</label>
+              <input type="time" id="booking-end" class="form-control" value="12:00" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="booking-title">Event / Session Title *</label>
+            <input type="text" id="booking-title" class="form-control" placeholder="e.g. AI & Web3 Hackathon Orientation" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="booking-organizer">Organizer / Student Lead *</label>
+              <input type="text" id="booking-organizer" class="form-control" value="Alex Rivera" required>
+            </div>
+            <div class="form-group">
+              <label for="booking-club">Club / Department *</label>
+              <input type="text" id="booking-club" class="form-control" value="GDSC Student Chapter" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="booking-supervisor">Faculty Advisor / In-Charge *</label>
+            <input type="text" id="booking-supervisor" class="form-control" value="Dr. K. Sharma (HOD CSE)" required>
+          </div>
+
+          <div class="form-group">
+            <label for="booking-purpose">Event Purpose &amp; Justification *</label>
+            <textarea id="booking-purpose" class="form-control" rows="2" placeholder="Briefly describe why this venue is required..." required>Interactive technical workshop for college students.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label style="margin-bottom: 0.5rem; display: block;">Additional Equipment Requirements:</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.8rem;">
+              <label style="display: flex; align-items: center; gap: 0.4rem;">
+                <input type="checkbox" name="equipment" value="Dual 4K Laser Projectors" checked> Projector &amp; Screen
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.4rem;">
+                <input type="checkbox" name="equipment" value="Surround Sound & 8 Wireless Mics" checked> Microphones &amp; Sound
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.4rem;">
+                <input type="checkbox" name="equipment" value="Live-Stream Rig"> Video Conf / Live Stream
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.4rem;">
+                <input type="checkbox" name="equipment" value="Stage Lighting"> Stage Spotlights
+              </label>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-booking-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-booking">
+              <i data-lucide="send" style="width: 16px; height: 16px;"></i> Submit Request
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Digital QR Gate Pass -->
+  <div class="modal-backdrop" id="modal-qr-pass">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>Campus Digital Entry Pass</h3>
+        <button class="btn-close" id="btn-close-qr-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="digital-pass-card" id="pass-content-card">
+          <div class="pass-watermark">VERIFIED PASS</div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-indigo); font-weight: 700;">
+            Official Campus Authorization
+          </div>
+          <h2 id="pass-event-title" style="font-size: 1.25rem; font-weight: 800; margin: 0.4rem 0;">Event Title</h2>
+          <div id="pass-code" class="pass-code-badge">PASS-AUD-0000</div>
+
+          <div class="pass-qr-frame">
+            <img id="pass-qr-img" src="" alt="Digital Gate Entry QR Code">
+          </div>
+
+          <div class="pass-meta-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+              <span style="color: var(--text-muted);">Venue:</span>
+              <strong id="pass-venue">-</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+              <span style="color: var(--text-muted);">Date &amp; Time:</span>
+              <span id="pass-time">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+              <span style="color: var(--text-muted);">Organizer:</span>
+              <span id="pass-organizer">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Status:</span>
+              <span class="badge badge-approved">VERIFIED &amp; APPROVED</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 1.25rem;">
+          <button class="btn btn-secondary" onclick="window.print()">
+            <i data-lucide="printer" style="width: 16px; height: 16px;"></i> Print Pass
+          </button>
+          <button class="btn btn-primary" id="btn-done-pass">Close Pass</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Approval / Rejection Note Modal -->
+  <div class="modal-backdrop" id="modal-approval-action">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 id="modal-action-title">Review Booking</h3>
+        <button class="btn-close" id="btn-close-action-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-action-description" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 1rem;"></p>
+        
+        <div class="form-group">
+          <label id="modal-action-label" for="action-comment">Remarks / Justification *</label>
+          <textarea id="action-comment" class="form-control" rows="3" placeholder="Enter remarks or reason..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button class="btn btn-secondary" id="btn-cancel-action-modal">Cancel</button>
+          <button class="btn" id="btn-confirm-action">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Booking Audit Trail & Lifecycle Modal -->
+  <div class="modal-backdrop" id="modal-audit-trail">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 id="modal-audit-title">Booking Audit Trail & Lifecycle</h3>
+        <button class="btn-close" id="btn-close-audit-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-audit-summary" style="background: rgba(15, 23, 42, 0.6); padding: 0.85rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.82rem; color: #cbd5e1;"></div>
+        <h4 style="font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem;">Approval Lifecycle & Verifications</h4>
+        <div id="modal-audit-timeline" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+          <button class="btn btn-secondary" id="btn-close-audit-btn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Add New Campus Resource (Admin & HOD) -->
+  <div class="modal-backdrop" id="modal-add-resource">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3>Add Campus Venue / Facility</h3>
+        <button class="btn-close" id="btn-close-add-resource-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-add-resource">
+          <div class="form-group">
+            <label for="new-resource-name">Venue / Resource Name *</label>
+            <input type="text" id="new-resource-name" class="form-control" placeholder="e.g. Vikram Sarabhai Innovation & Robotics Lab" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-resource-category">Category *</label>
+              <select id="new-resource-category" class="form-control" required>
+                <option value="Auditorium">Auditorium</option>
+                <option value="Computer Lab">Computer Lab</option>
+                <option value="Seminar Hall">Seminar Hall</option>
+                <option value="Classroom">Classroom</option>
+                <option value="Sports Complex">Sports Complex</option>
+                <option value="Media Kit / Studio">Media Kit / Studio</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="new-resource-capacity">Seating Capacity *</label>
+              <input type="number" id="new-resource-capacity" class="form-control" min="1" max="5000" placeholder="e.g. 120" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-resource-location">Campus Location &amp; Room *</label>
+            <input type="text" id="new-resource-location" class="form-control" placeholder="e.g. Science Complex, 2nd Floor - Room 204" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-resource-building">Building / Complex</label>
+              <input type="text" id="new-resource-building" class="form-control" placeholder="e.g. Science &amp; Innovation Block">
+            </div>
+            <div class="form-group">
+              <label for="new-resource-floor">Floor</label>
+              <input type="text" id="new-resource-floor" class="form-control" placeholder="e.g. 2nd Floor">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-resource-open">Opening Time</label>
+              <input type="time" id="new-resource-open" class="form-control" value="08:00">
+            </div>
+            <div class="form-group">
+              <label for="new-resource-close">Closing Time</label>
+              <input type="time" id="new-resource-close" class="form-control" value="21:00">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-resource-amenities">Amenities &amp; Equipment (comma-separated)</label>
+            <input type="text" id="new-resource-amenities" class="form-control" placeholder="e.g. 4K Laser Projector, High-End GPU Rigs, Central AC, WiFi 6, Smart Board">
+          </div>
+
+          <div class="form-group">
+            <label for="new-resource-image">Venue Image URL (optional)</label>
+            <input type="url" id="new-resource-image" class="form-control" placeholder="https://images.unsplash.com/... (leave blank for high-res category default)">
+          </div>
+
+          <div class="form-group" style="margin-top: 0.75rem;">
+            <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer;">
+              <input type="checkbox" id="new-resource-requires-admin" style="width: 16px; height: 16px;">
+              <span>Requires Final Approval from Estate Office (Campus Administrator)</span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-add-resource-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-add-resource">
+              <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Add Venue to Catalogue
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-Time Toast Notifications Container -->
+  <div id="toast-container"></div>
+
+  <!-- Application Logic Scripts -->
+  <script src="/js/theme.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
