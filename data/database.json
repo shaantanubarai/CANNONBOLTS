@@ -160,40 +160,6 @@
         "close": "18:00"
       },
       "status": "active"
-    },
-    {
-      "id": "res-1790930301846",
-      "name": "werwer",
-      "category": "Auditorium",
-      "capacity": 3,
-      "location": "asdsd",
-      "building": "sdd",
-      "floor": "3",
-      "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=60",
-      "amenities": [],
-      "requiresAdminApproval": false,
-      "operatingHours": {
-        "open": "08:00",
-        "close": "21:00"
-      },
-      "status": "active"
-    },
-    {
-      "id": "res-1790930358064",
-      "name": "wew",
-      "category": "Auditorium",
-      "capacity": 3,
-      "location": "weewe",
-      "building": "sda",
-      "floor": "3",
-      "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=60",
-      "amenities": [],
-      "requiresAdminApproval": true,
-      "operatingHours": {
-        "open": "08:00",
-        "close": "21:00"
-      },
-      "status": "active"
     }
   ],
   "bookings": [
@@ -220,111 +186,21 @@
       "approvalStage": "COMPLETED",
       "supervisor": "Dr. K. Sharma (HOD CSE)",
       "passCode": "PASS-AUD-8821",
-      "createdAt": "2026-10-01T08:03:08.646Z",
+      "createdAt": "2026-10-01T09:17:20.609Z",
       "approvalHistory": [
         {
           "stage": "Faculty Advisor",
           "status": "APPROVED",
           "by": "Dr. K. Sharma",
           "note": "Recommended for university-level technical fest.",
-          "timestamp": "2026-10-01T12:03:08.646Z"
+          "timestamp": "2026-10-01T13:17:20.610Z"
         },
         {
           "stage": "Estate Admin",
           "status": "APPROVED",
           "by": "Campus Estate Officer",
           "note": "Approved. Main AC and power backup scheduled.",
-          "timestamp": "2026-10-01T18:09:48.646Z"
-        }
-      ],
-      "qrDataUrl": "data:image/png;base64,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"
-    },
-    {
-      "id": "book-1790930319520",
-      "resourceId": "res-1790930301846",
-      "resourceName": "werwer",
-      "eventTitle": "qwewqweqe",
-      "organizerName": "Estate Admin Officer",
-      "clubName": "Campus Administration",
-      "department": "Engineering & Computing",
-      "role": "admin",
-      "date": "2026-10-02",
-      "startTime": "10:00",
-      "endTime": "12:00",
-      "expectedAttendees": 50,
-      "purpose": "Interactive technical workshop for college students.",
-      "requestedEquipment": [
-        "Dual 4K Laser Projectors",
-        "Surround Sound & 8 Wireless Mics"
-      ],
-      "status": "APPROVED",
-      "approvalStage": "COMPLETED",
-      "supervisor": "Dr. K. Sharma (HOD CSE)",
-      "passCode": "PASS-AUD-7191",
-      "qrDataUrl": "data:image/png;base64,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",
-      "createdAt": "2026-10-02T08:38:39.520Z",
-      "approvalHistory": [
-        {
-          "stage": "Submission",
-          "status": "SUBMITTED",
-          "by": "Estate Admin Officer",
-          "note": "Booking request created and dispatched for faculty approval.",
-          "timestamp": "2026-10-02T08:38:39.520Z"
-        },
-        {
-          "stage": "Estate Admin",
-          "status": "APPROVED",
-          "by": "Campus Estate Officer",
-          "note": "Approved. Facilities and equipment verified.",
-          "timestamp": "2026-10-02T08:38:49.775Z"
-        }
-      ]
-    },
-    {
-      "id": "book-1790930371058",
-      "resourceId": "res-1790930358064",
-      "resourceName": "wew",
-      "eventTitle": "asdad",
-      "organizerName": "Estate Admin Officer",
-      "clubName": "Campus Administration",
-      "department": "Engineering & Computing",
-      "role": "admin",
-      "date": "2026-10-02",
-      "startTime": "10:00",
-      "endTime": "12:00",
-      "expectedAttendees": 50,
-      "purpose": "Interactive technical workshop for college students.",
-      "requestedEquipment": [
-        "Dual 4K Laser Projectors",
-        "Surround Sound & 8 Wireless Mics"
-      ],
-      "status": "APPROVED",
-      "approvalStage": "COMPLETED",
-      "supervisor": "Dr. K. Sharma (HOD CSE)",
-      "passCode": "PASS-AUD-9223",
-      "qrDataUrl": "data:image/png;base64,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",
-      "createdAt": "2026-10-02T08:39:31.058Z",
-      "approvalHistory": [
-        {
-          "stage": "Submission",
-          "status": "SUBMITTED",
-          "by": "Estate Admin Officer",
-          "note": "Booking request created and dispatched for faculty approval.",
-          "timestamp": "2026-10-02T08:39:31.058Z"
-        },
-        {
-          "stage": "Faculty Advisor",
-          "status": "APPROVED",
-          "by": "Dr. K. Sharma (HOD CSE)",
-          "note": "Approved. Facilities and equipment verified.",
-          "timestamp": "2026-10-02T08:39:46.696Z"
-        },
-        {
-          "stage": "Estate Admin",
-          "status": "APPROVED",
-          "by": "Campus Estate Officer",
-          "note": "Approved. Facilities and equipment verified.",
-          "timestamp": "2026-10-02T08:40:12.097Z"
+          "timestamp": "2026-10-01T19:24:00.610Z"
         }
       ]
     },
@@ -350,17 +226,57 @@
       "approvalStage": "COMPLETED",
       "supervisor": "Prof. Rajesh Verma",
       "passCode": "PASS-LAB-3141",
-      "createdAt": "2026-10-01T18:09:48.646Z",
+      "createdAt": "2026-10-01T19:24:00.610Z",
       "approvalHistory": [
         {
           "stage": "Faculty Advisor",
           "status": "APPROVED",
           "by": "Prof. Rajesh Verma",
           "note": "Lab assistants instructed to prepare GPU cluster accounts.",
-          "timestamp": "2026-10-01T22:03:08.646Z"
+          "timestamp": "2026-10-01T23:17:20.610Z"
         }
+      ]
+    },
+    {
+      "id": "book-1790932687760",
+      "resourceId": "res-1",
+      "resourceName": "Dr. APJ Abdul Kalam Auditorium",
+      "eventTitle": "sdsd",
+      "organizerName": "Estate Admin Officer",
+      "clubName": "Campus Administration",
+      "department": "Engineering & Computing",
+      "role": "admin",
+      "date": "2026-10-02",
+      "startTime": "13:00",
+      "endTime": "15:00",
+      "expectedAttendees": 50,
+      "purpose": "Interactive technical workshop for college students.",
+      "requestedEquipment": [
+        "Dual 4K Laser Projectors",
+        "Surround Sound & 8 Wireless Mics"
       ],
-      "qrDataUrl": "data:image/png;base64,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"
+      "status": "PENDING",
+      "approvalStage": "PENDING_ADMIN",
+      "supervisor": "Dr. K. Sharma (HOD CSE)",
+      "passCode": null,
+      "qrDataUrl": null,
+      "createdAt": "2026-10-02T09:18:07.760Z",
+      "approvalHistory": [
+        {
+          "stage": "Submission",
+          "status": "SUBMITTED",
+          "by": "Estate Admin Officer",
+          "note": "Booking request created and dispatched for faculty approval.",
+          "timestamp": "2026-10-02T09:18:07.760Z"
+        },
+        {
+          "stage": "Faculty Advisor",
+          "status": "APPROVED",
+          "by": "Dr. K. Sharma (HOD CSE)",
+          "note": "Approved. Facilities and equipment verified.",
+          "timestamp": "2026-10-02T09:18:25.775Z"
+        }
+      ]
     },
     {
       "id": "book-103",
@@ -381,12 +297,21 @@
         "Podium with Mic",
         "AC"
       ],
-      "status": "PENDING",
-      "approvalStage": "PENDING_FACULTY",
+      "status": "REJECTED",
+      "approvalStage": "REJECTED",
       "supervisor": "Dean of Academic Affairs",
       "passCode": null,
-      "createdAt": "2026-10-02T05:16:28.646Z",
-      "approvalHistory": []
+      "createdAt": "2026-10-02T06:30:40.610Z",
+      "approvalHistory": [
+        {
+          "stage": "Faculty Advisor",
+          "status": "REJECTED",
+          "by": "Dr. K. Sharma (HOD CSE)",
+          "note": "Scheduling conflict with academic departmental event.",
+          "timestamp": "2026-10-02T09:18:28.496Z"
+        }
+      ],
+      "rejectionReason": "Scheduling conflict with academic departmental event."
     },
     {
       "id": "book-104",
@@ -410,7 +335,7 @@
       "approvalStage": "PENDING_FACULTY",
       "supervisor": "Dr. Anita Roy",
       "passCode": null,
-      "createdAt": "2026-10-02T06:39:48.646Z",
+      "createdAt": "2026-10-02T07:54:00.610Z",
       "approvalHistory": []
     },
     {
@@ -435,71 +360,41 @@
       "approvalStage": "COMPLETED",
       "supervisor": "Prof. S. N. Bannerjee",
       "passCode": "PASS-AUD-9904",
-      "createdAt": "2026-10-01T20:56:28.646Z",
+      "createdAt": "2026-10-01T22:10:40.610Z",
       "approvalHistory": [
         {
           "stage": "Faculty Advisor",
           "status": "APPROVED",
           "by": "Prof. S. N. Bannerjee",
           "note": "Approved for evening rehearsal session.",
-          "timestamp": "2026-10-01T23:43:08.646Z"
+          "timestamp": "2026-10-02T00:57:20.610Z"
         }
-      ],
-      "qrDataUrl": "data:image/png;base64,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"
+      ]
     }
   ],
-  "conflictLog": [
-    {
-      "id": "conf-sim-1790929812114",
-      "timestamp": "2026-10-02T08:30:12.114Z",
-      "resourceId": "res-1",
-      "resourceName": "Dr. APJ Abdul Kalam Auditorium",
-      "attemptedBy": "AI Society (Live Demo Simulation)",
-      "eventTitle": "Simulated Concurrent Reservation Attempt",
-      "requestedTime": "09:30 - 11:30",
-      "date": "2026-10-02",
-      "reason": "Zero-tolerance Double Booking Intercept: Slot 09:00 - 12:00 is occupied by Hackathon Opening Ceremony",
-      "actionTaken": "Real-time collision averted. Automated alternative slots calculated and returned."
-    }
-  ],
+  "conflictLog": [],
   "notifications": [
     {
-      "id": "notif-1790930412109",
-      "title": "Booking Confirmed! 🎉",
-      "message": "Booking for wew (asdad) is fully approved. Digital pass generated!",
-      "timestamp": "2026-10-02T08:40:12.109Z",
-      "type": "success",
+      "id": "notif-1790932708497",
+      "title": "Booking Request Rejected",
+      "message": "Request for Sir CV Raman Seminar Hall was rejected: Scheduling conflict with academic departmental event.",
+      "timestamp": "2026-10-02T09:18:28.497Z",
+      "type": "danger",
       "read": false
     },
     {
-      "id": "notif-1790930386697",
+      "id": "notif-1790932705776",
       "title": "Faculty Endorsed Request",
-      "message": "Estate Admin Officer's booking for wew was approved by Faculty and routed to Estate Admin.",
-      "timestamp": "2026-10-02T08:39:46.697Z",
+      "message": "Estate Admin Officer's booking for Dr. APJ Abdul Kalam Auditorium was approved by Faculty and routed to Estate Admin.",
+      "timestamp": "2026-10-02T09:18:25.776Z",
       "type": "info",
       "read": false
     },
     {
-      "id": "notif-1790930371059",
+      "id": "notif-1790932687761",
       "title": "New Booking Request",
-      "message": "Estate Admin Officer requested wew on 2026-10-02 (10:00 - 12:00) for 'asdad'.",
-      "timestamp": "2026-10-02T08:39:31.059Z",
-      "type": "info",
-      "read": false
-    },
-    {
-      "id": "notif-1790930329797",
-      "title": "Booking Confirmed! 🎉",
-      "message": "Booking for werwer (qwewqweqe) is fully approved. Digital pass generated!",
-      "timestamp": "2026-10-02T08:38:49.797Z",
-      "type": "success",
-      "read": false
-    },
-    {
-      "id": "notif-1790930319521",
-      "title": "New Booking Request",
-      "message": "Estate Admin Officer requested werwer on 2026-10-02 (10:00 - 12:00) for 'qwewqweqe'.",
-      "timestamp": "2026-10-02T08:38:39.521Z",
+      "message": "Estate Admin Officer requested Dr. APJ Abdul Kalam Auditorium on 2026-10-02 (13:00 - 15:00) for 'sdsd'.",
+      "timestamp": "2026-10-02T09:18:07.761Z",
       "type": "info",
       "read": false
     }
